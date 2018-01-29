@@ -1,0 +1,64 @@
+{
+    "name": "vubib/vubib",
+    "description": "VuBib is a bibliography management software, developed with Zend Expressive framewors as a base.",
+    "type": "project",
+    "homepage": "https://github.com/SravanthiVillanova/Bibliography-IS",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Falvey Library",
+            "homepage": "https://github.com/FalveyLibraryTechnology"
+        }
+    ],
+    "require": {
+        "php": "^5.5 || ^7.0",
+        "zendframework/zend-expressive": "^1.0",
+        "zendframework/zend-expressive-helpers": "^2.0",
+        "zendframework/zend-stdlib": "^2.7 || ^3.0",
+        "zendframework/zend-expressive-fastroute": "^1.0",
+        "zendframework/zend-servicemanager": "^2.7.3 || ^3.0",
+        "zendframework/zend-expressive-zendviewrenderer": "^1.0",
+        "mtymek/blast-base-url": "^0.2.0",
+        "zendframework/zend-db": "^2.8",
+		"zendframework/zend-paginator": "^2.5",
+        
+        "slim/flash": "^0.2.0",
+        "filp/whoops": "^2.1",
+		"sandrokeil/interop-config": "^1.0",
+		"zendframework/zend-session": "^2.7.3",
+		"shrikeh/teapot": "^2.1",
+		"zendframework/zend-code": "^3.0",
+		"zendframework/zend-form": "^2.9"
+    },
+    "require-dev": {
+		"friendsofphp/php-cs-fixer": "^1.12",
+		"phploc/phploc": "2.0.6",
+		"phpmd/phpmd": "2.4.2",
+        "phpunit/phpunit": "^4.8",
+		"phing/phing": "2.15.2",
+		"sebastian/phpcpd": "2.0.0",
+        "squizlabs/php_codesniffer": "^2.3"	
+    },
+    "autoload": {
+        "psr-4": {
+            "VuBib\\": "src/VuBib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AppTest\\": "test/AppTest/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "serve": "php -S 0.0.0.0:8080 -t public/ public/index.php",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "upload-coverage": "coveralls -v"
+    }
+}
