@@ -28,11 +28,9 @@
 		echo $this->layout()->breadcrumbs;
 	}
   ?>
-  <a href="<?=$this->url('login')?><?='?logout=y'?>" style="float:right;color:white;">Logout</a>
 </div>
 
 <!-- Fixed navbar -->
-	<?php if (!$this->layout()->hideNavigation): ?>
     <div class="navbar navbar-default" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -45,10 +43,6 @@
         </div>
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right pull-left">
-			<?php 
-				$modules = $this->isUser()->hasPermission();
-				if (in_array("Work", $modules)) { 
-			?>
             <li class="dropdown">
 				<a href="#" class="dropdown-toggle " data-toggle="dropdown">Work<b class="caret"></b></a>			  
 				<ul class="dropdown-menu">
@@ -59,9 +53,6 @@
 				<li><a href="<?php echo $this->url('manage_work') ?><?= '?action=classify' ?>">Classify</a></li>
 				</ul>
 			</li>
-			<?php } ?>
-				<!--<li class="divider-vertical"></li>-->
-			<?php if (in_array("Work Type", $modules)) { ?>
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Work Type<b class="caret"></b></a>
 				<ul class="dropdown-menu">
@@ -70,8 +61,6 @@
 				<li><a href="<?php echo $this->url('attributes_worktype') ?>">Attributes</a></li>
 				</ul>
             </li>       
-			<?php } ?>
-			<?php if (in_array("Classification", $modules)) { ?>
             <li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Classification<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
@@ -81,8 +70,6 @@
 				<li><a href="<?php echo $this->url('exportlist_classification') ?><?='?action=export_classification'?>">Export List</a></li>
               </ul>
             </li>  			
-            <?php } ?>
-			<?php if (in_array("Agent", $modules)) { ?>
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Agent<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
@@ -92,8 +79,6 @@
 				<li><a href="<?php echo $this->url('merge_agent') ?><?='?action=merge'?>">Merge</a></li>
               </ul>
             </li>  
-			<?php } ?>
-			<?php if (in_array("Agent Type", $modules)) { ?>
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Agent Type<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
@@ -101,8 +86,6 @@
 				<li><a href="<?php echo $this->url('manage_agenttype') ?>">Manage</a></li>
               </ul>
             </li> 
-			<?php } ?>
-			<?php if (in_array("Publisher", $modules)) { ?>
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Publisher<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
@@ -112,8 +95,6 @@
 				<li><a href="<?php echo $this->url('merge_publisher') ?>">Merge</a></li>
               </ul>
             </li> 
-			<?php } ?>
-			<?php if (in_array("Language", $modules)) { ?>
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Language<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
@@ -121,8 +102,6 @@
 				<li><a href="<?php echo $this->url('manage_language') ?>">Manage</a></li>
               </ul>
             </li> 
-			<?php } ?>
-			<?php if (in_array("Users", $modules)) { ?>
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Users<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
@@ -131,21 +110,17 @@
 				<li><a href="<?php echo $this->url('access_users') ?>">Access</a></li>
               </ul>
             </li> 
-			<?php } ?>
-			<?php if (in_array("Preferences", $modules)) { ?>
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
                 <li><a href="<?php echo $this->url('changepassword_preferences') ?><?='?action=change_pwd'?>">Change Password</a></li>
               </ul>
             </li> 
-			<?php } ?>
           </ul>
 		  
         </div><!--/.nav-collapse -->
       </div>
     </div>
-	<?php endif; ?>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -156,111 +131,6 @@
 		echo $this->content;
 	?>
  </div> 
-
- <?php
-	$url_components = parse_url($this->serverUrl());
-	$url_host = $url_components['scheme'] . '://' . $url_components['host'];
-	
-	$str = "";
-    $page = "";
-	
-	$returnValue = preg_replace('/index.php/','',$_SERVER['PHP_SELF']);
-	
-	if($returnValue == $_SERVER['REQUEST_URI'])
-	{
-		$page = "public";
-		$str = $page . "/";
-	}
-	else
-	{
-		$str = str_replace($returnValue,'',parse_url($this->url())['path']);
-		if(isset($_SERVER['QUERY_STRING']))
-		{
-			if(preg_match('/action=(?<action_name>[A-Za-z]+)/', $_SERVER['QUERY_STRING'], $matches))
-			{
-				$str .= "?action=" . $matches['action_name'];
-			}
-		}
-	}
-			
-	$ins = $this->isUser()->isInsSet($str);
-
-	if(isset($ins['instructions']))
-	{
-		$this->layout()->instructions = $ins['instructions'];
-	?>
-		<script>
-		$(document).ready(function () {
-			var pgid = <?php echo json_encode($ins['id']);?>;
-			var pgnm = <?php echo json_encode($ins['page_name']);?>;
-			$('#page_id').val(pgid);
-			$('#page_name').val(pgnm);
-			return false;
-		});
-		</script>
-	<?php
-	}
-	else
-	{
-		$this->layout()->instructions = '';
-	?>
-		<script>
-		$(document).ready(function () {	
-			var pgnm = <?php echo json_encode($str);?>;
-			$('#page_name').val(pgnm);
-			return false;
-		});
-		</script>
-	<?php
-	}
-	
-	$usr = $this->isUser()->getUserType();
-
-	if($usr['level'] == "Administrator")
-	{
-	?>
-		<b><?php
-			if($page == "public")
-			{
-				echo "Welcome, " . $usr['name'] . "<br/>"; 
-				$cnt = $this->isUser()->getRvwCount();
-				echo "You have " . $cnt[0]['review_count'] . " works awaiting review.<br />";
-			}
-			?>
-		</b>
-	<?php			
-	}
-	if($usr['level'] == "Super User" || $usr['level'] == "User")
-	{
-	?>
-		<b>
-		<?php 
-		if($page == "public")
-		{
-			echo "Welcome, " . $usr['name']; 
-		}
-		?>
-		</b>
-	<?php
-	}				
-?>
-<script>
-$(document).ready(function () {	
-	var lvl = <?php echo json_encode($usr['level']);?>;
-	if(lvl === "Super User" || lvl === "User")
-	{
-		//$('#ins_submit').prop("disabled", "disabled");
-		$('#ins_submit').hide();
-		return false;
-	}
-	if(lvl === "Administrator")
-	{
-		//$('#ins_submit').prop("disabled", false);
-		$('#ins_submit').show();
-		return false;
-	}
-});
-</script>
         <main class="container">  
 				<div style="float: right; width: 20%;">
 				<div class="tipbox">
@@ -274,38 +144,5 @@ $(document).ready(function () {
 				</div>
 			   </div>	
         </main>
-		<script>
-		$(document).ready(function () {
-			//var ur = <?php echo json_encode($url_host); ?>;
-			var ur = "";
-			$('#ins_submit').on('click', function(){
-				//console.log('ins save clicked');
-				var ins_text = $('#instructions').val();
-				var pg_id = $('#page_id').val();
-				var pg_nm = $('#page_name').val();				
-				//alert(ins_text);
-				$.ajax({
-					method: 'post',
-					//url: 'http://localhost<?=$this->url('get_work_details')?>',
-					url: ur + '<?=$this->url('get_work_details')?>',
-					data: {
-						ins_text: ins_text,
-						pg_id: pg_id,
-						pg_nm: pg_nm
-					},
-					dataType: "json", 
-					cache: false,
-					success: function(data)
-					{	
-					},
-					error: function (data) { 
-					//$("#Classification", context).html('<p>No Options</p>');
-					}
-				});					
-				return false;
-			});
-		});
-		</script>
 </div>
-
 </body>
